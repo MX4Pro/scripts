@@ -7,11 +7,20 @@
 Vim_autoload=/usr/share/vim/vim74/autoload/
 Vim_bundle=/usr/share/vim/vim74/bundle/
 
+#定义消息显示颜色
+Red(){
+    echo -e "\033[31m$*\033[0m"
+}
+
+Green(){
+    echo -e "\033[32m$*\033[0m"
+}
+
 #检查用户
 Check_user(){
     if [ $UID -ne 0 ]
     then
-        echo "请使用root或加sudo执行"
+        Red "请使用root或加sudo执行!"
         exit 1
     fi
 }
@@ -181,31 +190,41 @@ set background=dark
 colorscheme molokai
 "始终显示最后一个状态行
 set laststatus=2
+
 "设置快捷键映射
 inoremap <C-l> <Right>
 inoremap <C-f> <Right>
-inoremap <C-h> <Left>  #如果安装有AutoComplPop插件，将导致映射无法生效
+inoremap <C-h> <Left>  "如果安装有AutoComplPop插件，将导致映射无法生效
 inoremap <C-b> <Left>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap<C-e> <End>
 inoremap<C-a> <Home>
-"启动插件管理器
+
+"启用插件管理器
 call pathogen#infect()
 call pathogen#helptags()
+
 "加载shell和python模板
 autocmd BufNewFile *.sh 0r /usr/share/vim/vimfiles/template.sh
 autocmd BufNewFile *.py 0r /usr/share/vim/vimfiles/template.py
 autocmd BufNewFile * normal G
+
+"映射F3键打开标签窗口
 map <F3> :tabnew .<CR>
+
+"打开buffer时就执行语法检查
 let g:syntastic_check_on_open = 1
-"使用 "mapleader" 变量的映射
+
+"mapleader快捷键由\更改为, 
 let mapleader = "," 
 let g:mapleader = "," 
+
 "映射F12键打开函数列表
 noremap <F12> :TlistToggle<CR>
 let Tlist_Exit_OnlyWindow = 1
 let Tlist_Use_Right_Window=1 "在右侧显示窗口
+
 "映射Ctrl+n打开目录列表
 map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -216,8 +235,9 @@ EOF
 }
 
 Main(){
-    echo "正在优化系统,请耐心等候..."
+    clear
     Check_user && \
+    Green "正在优化系统,请耐心等候..."
     Install_soft && \
     Base_install && \
     Download_vim_plug && \
@@ -225,4 +245,4 @@ Main(){
 }
 
 Main
-echo "优化已完成,需要重启系统才能完全生效!"
+Green "优化已完成,需要重启系统才能完全生效!"
