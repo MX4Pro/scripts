@@ -29,17 +29,17 @@ Check_user(){
 Install_soft(){
     if [[ "$(lsb_release -d 2>/dev/null|awk '{print $2}')" == "CentOS" || -x /usr/bin/yum ]]
     then
-        yum update -y -q
-        yum install -y -q epel-release
-        yum install -y -q bash-completion bash-completion-extras ctags dstat gcc gcc-c++ git htop iptables links lrzsz lsof mlocate nc net-tools nmap ntp ntpdate ntsy  sv openssh-clients openssh-devel redhat-lsb rsync sysstat tcpdump tmux tree unzip vim vim-enhanced wget  
+        ps aux|grep [y]um && { Red "已有yum进程,请稍候再运行此脚本!";exit 1;} || yum update -y -q
+        yum install -y -q epel-release && \
+        yum install -y -q bash-completion bash-completion-extras ctags dstat gcc gcc-c++ git htop iptables links lrzsz lsof mlocate nc net-tools nmap ntp ntpdate ntsy  sv openssh-clients openssh-devel redhat-lsb rsync sysstat tcpdump tmux tree unzip vim vim-enhanced wget  || { Red "无法安装软件,请检查网络是否正常或另有yum安装进程!";exit 1;}
         #禁用selinux
         sed -i 's@SELINUX=enforcing@SELINUX=disabled@' /etc/selinux/config
 
     elif [[ "$(lsb_release -d 2>/dev/null|awk '{print $2}')" == "Ubuntu" || -x /usr/bin/apt ]]
     then
-        apt-get update -qq
-        apt-get install -y -qq autoconf atop acl cmake curl dstat exuberant-ctags gcc g++ git glances htop lrzsz make nmap sysstat tree unzip wget zip 
-        sed -i '/ENABLED/s/false/true/g' /etc/default/sysstat && service sysstat start &>/dev/null
+        ps aux|grep [a]pt && { Red "已有apt进程,请稍候再运行此脚本!";exit 1;} || apt-get update -qq
+        apt-get install -y -qq autoconf atop acl cmake curl dstat exuberant-ctags gcc g++ git glances htop lrzsz make nmap sysstat tree unzip wget zip  && \
+        sed -i '/ENABLED/s/false/true/g' /etc/default/sysstat && service sysstat start &>/dev/null || { Red "无法安装软件,请检查网络是否正常或另有apt安装进程!";exit 1;}
         ln -sf /usr/bin/vim.basic /etc/alternatives/editor
     fi
 }
