@@ -29,7 +29,7 @@ Check_user(){
 Install_soft(){
     if [[ "$(lsb_release -d 2>/dev/null|awk '{print $2}')" == "CentOS" || -x /usr/bin/yum ]]
     then
-        ps aux|grep [y]um && { Red "已有yum进程,请稍候再运行此脚本!";exit 1;} || yum update -y -q
+        ps aux|grep [y]um && { Red "已有yum进程,请稍候再运行此脚本!";exit 1;}
         yum install -y -q ctags git vim vim-enhanced wget  || \
         { Red "无法安装软件,请检查网络是否正常或另有yum安装进程!";exit 1;}
 
