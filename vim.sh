@@ -82,6 +82,8 @@ Download_vim_plug(){
     git clone https://github.com/scrooloose/nerdcommenter.git
     #html代码补全,快捷键ctrl+y+,
     git clone https://github.com/mattn/emmet-vim.git
+    #模糊查找
+    git clone https://github.com/Yggdroot/LeaderF.git
 }
 
 #优化vim
