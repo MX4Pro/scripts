@@ -31,6 +31,9 @@ else
 PROMPT='%{\$fg_bold[green]%}%n@%m:%{\$fg_bold[green]%}%p%{\$fg[cyan]%}%~%{\$fg_bold[blue]%}\$(git_prompt_info)%{\$fg_bold[blue]%}% %{\$reset_color%}\$ '
 fi
 [[ -s /usr/share/autojump/autojump.zsh ]] && source /usr/share/autojump/autojump.zsh
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
 EOF
 	else
 		Red "无法连接外网,请检查网络设置."
@@ -57,6 +60,9 @@ else
 PROMPT='%{\$fg_bold[green]%}%n@%m:%{\$fg_bold[green]%}%p%{\$fg[cyan]%}%~%{\$fg_bold[blue]%}\$(git_prompt_info)%{\$fg_bold[blue]%}% %{\$reset_color%}\$ '
 fi
 [[ -s /etc/profile.d/autojump.zsh ]] && source /etc/profile.d/autojump.zsh
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
 EOF
 	else
 		Red "无法连接外网,请检查网络设置."
