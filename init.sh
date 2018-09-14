@@ -1,11 +1,8 @@
 #!/bin/bash
 #Author:owen
 #Description:系统安装后的初始优化
-#Version:1.0
+#Version:1.1
 
-#定义变量
-Vim_autoload=/usr/share/vim/vim74/autoload/
-Vim_bundle=/usr/share/vim/vim74/bundle/
 
 #定义消息显示颜色
 Red(){
@@ -31,14 +28,14 @@ Install_soft(){
     then
         ps aux|grep [y]um && { Red "已有yum进程,请稍候再运行此脚本!";exit 1;} || yum update -y -q
         yum install -y -q epel-release && \
-        yum install -y -q bash-completion bash-completion-extras ctags dstat gcc gcc-c++ git htop iptables links lrzsz lsof mlocate nc net-tools nmap ntp ntpdate ntsy  sv openssh-clients openssh-devel redhat-lsb rsync sysstat tcpdump tmux tree unzip vim vim-enhanced wget  || { Red "无法安装软件,请检查网络是否正常或另有yum安装进程!";exit 1;}
+        yum install -y -q bash-completion bash-completion-extras ctags dstat gcc gcc-c++ git htop iptables links lrzsz lsof mlocate nc net-tools nmap ntp ntpdate ntsy  sv openssh-clients openssh-devel python redhat-lsb rsync sysstat tcpdump tmux tree unzip vim vim-enhanced wget  || { Red "无法安装软件,请检查网络是否正常或另有yum安装进程!";exit 1;}
         #禁用selinux
         sed -i 's@SELINUX=enforcing@SELINUX=disabled@' /etc/selinux/config
 
     elif [[ "$(lsb_release -d 2>/dev/null|awk '{print $2}')" == "Ubuntu" || -x /usr/bin/apt ]]
     then
         ps aux|grep [a]pt && { Red "已有apt进程,请稍候再运行此脚本!";exit 1;} || apt-get update -qq
-        apt-get install -y -qq autoconf atop acl cmake curl dstat exuberant-ctags gcc g++ git glances htop lrzsz make nmap sysstat tree unzip wget zip  && \
+        apt-get install -y -qq autoconf atop acl cmake curl dstat exuberant-ctags gcc g++ git glances htop lrzsz make nmap python sysstat tree unzip wget zip  && \
         sed -i '/ENABLED/s/false/true/g' /etc/default/sysstat && service sysstat start &>/dev/null || { Red "无法安装软件,请检查网络是否正常或另有apt安装进程!";exit 1;}
         ln -sf /usr/bin/vim.basic /etc/alternatives/editor
     fi
@@ -88,16 +85,34 @@ export EDITOR=vim
 EOF
 }
 
+#定义变量
+if [[ "$(vim --version|head -1|awk '{print $5}')" == "7.4" ]]
+then
+    Vim_autoload=/usr/share/vim/vim74/autoload/
+    Vim_bundle=/usr/share/vim/vim74/bundle/
+    Vim_colors=/usr/share/vim/vim74/colors/
+elif [[ "$(vim --version|head -1|awk '{print $5}')" == "8.0" ]]
+then
+    Vim_autoload=/usr/share/vim/vim80/autoload/
+    Vim_bundle=/usr/share/vim/vim80/bundle/
+    Vim_colors=/usr/share/vim/vim80/colors/
+elif [[ "$(vim --version|head -1|awk '{print $5}')" == "8.1" ]]
+then
+    Vim_autoload=/usr/share/vim/vim81/autoload/
+    Vim_bundle=/usr/share/vim/vim81/bundle/
+    Vim_colors=/usr/share/vim/vim81/colors/
+fi
+
 #下载VIM插件
 Download_vim_plug(){
     #插件管理器
-    wget https://tpo.pe/pathogen.vim -P /usr/share/vim/vim74/autoload/
+    wget https://tpo.pe/pathogen.vim -P $Vim_autoload
     [ ! -e $Vim_bundle ] && mkdir -p $Vim_bundle
     cd $Vim_bundle
     #下载molokai配色
-    wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim -P /usr/share/vim/vim74/colors
+    wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim -P $Vim_colors
     #下载配色calmar256-dark
-    wget  https://gitshell.com/Lawrence-zxc/vimfile/raw/blob/master/colors/calmar256-dark.vim -P /usr/share/vim/vim74/colors
+    wget  https://gitshell.com/Lawrence-zxc/vimfile/raw/blob/master/colors/calmar256-dark.vim -P $Vim_colors
     #下载状态栏插件
     git clone https://github.com/vim-airline/vim-airline
     #符号自动补全

@@ -1,11 +1,8 @@
 #!/bin/bash
 #Author:owen
-#Description:vim扩展及个性化脚本,适用于vim7.4
-#Version:1.0
+#Description:vim扩展及个性化脚本,适用于vim7.4,vim8.0,vim8.1
+#Version:1.1
 
-#定义变量
-Vim_autoload=/usr/share/vim/vim74/autoload/
-Vim_bundle=/usr/share/vim/vim74/bundle/
 
 #定义消息显示颜色
 Red(){
@@ -42,16 +39,34 @@ Install_soft(){
     fi
 }
 
+#定义变量
+if [[ "$(vim --version|head -1|awk '{print $5}')" == "7.4" ]]
+then
+    Vim_autoload=/usr/share/vim/vim74/autoload/
+    Vim_bundle=/usr/share/vim/vim74/bundle/
+    Vim_colors=/usr/share/vim/vim74/colors/
+elif [[ "$(vim --version|head -1|awk '{print $5}')" == "8.0" ]]
+then
+    Vim_autoload=/usr/share/vim/vim80/autoload/
+    Vim_bundle=/usr/share/vim/vim80/bundle/
+    Vim_colors=/usr/share/vim/vim80/colors/
+elif [[ "$(vim --version|head -1|awk '{print $5}')" == "8.1" ]]
+then
+    Vim_autoload=/usr/share/vim/vim81/autoload/
+    Vim_bundle=/usr/share/vim/vim81/bundle/
+    Vim_colors=/usr/share/vim/vim81/colors/
+fi
+
 #下载VIM插件
 Download_vim_plug(){
     #插件管理器
-    wget https://tpo.pe/pathogen.vim -P /usr/share/vim/vim74/autoload/
+    wget https://tpo.pe/pathogen.vim -P $Vim_autoload
     [ ! -e $Vim_bundle ] && mkdir -p $Vim_bundle
     cd $Vim_bundle
     #下载molokai配色
-    wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim -P /usr/share/vim/vim74/colors
+    wget https://raw.githubusercontent.com/tomasr/molokai/master/colors/molokai.vim -P $Vim_colors
     #下载配色calmar256-dark
-    wget  https://gitshell.com/Lawrence-zxc/vimfile/raw/blob/master/colors/calmar256-dark.vim -P /usr/share/vim/vim74/colors
+    wget  https://gitshell.com/Lawrence-zxc/vimfile/raw/blob/master/colors/calmar256-dark.vim -P $Vim_colors
     #下载状态栏插件
     git clone https://github.com/vim-airline/vim-airline
     #符号自动补全
